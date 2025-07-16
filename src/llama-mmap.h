@@ -60,6 +60,29 @@ struct llama_file_disk : public llama_file {
     void write_raw(const void * ptr, size_t len) const override;
     void write_u32(uint32_t val) const override;
 
+    /// @return contiguous in-memory contents, or nullptr if not memory-backed
+    virtual const void * data_ptr() const { return nullptr; }
+};
+
+struct llama_file_disk : public llama_file {
+    llama_file_disk(const char * fname, const char * mode, bool use_direct_io = false);
+    llama_file_disk(FILE * file);
+    ~llama_file_disk() override;
+
+    size_t tell() const override;
+    size_t size() const override;
+    int file_id() const override;
+
+    void seek(size_t offset, int whence) const override;
+
+    void read_raw(void * ptr, size_t len) override;
+    void read_raw_unsafe(void * ptr, size_t len) override;
+    void read_aligned_chunk(void * dest, size_t size) override;
+    uint32_t read_u32() override;
+
+    void write_raw(const void * ptr, size_t len) const override;
+    void write_u32(uint32_t val) const override;
+
     size_t read_alignment() const override;
     bool has_direct_io() const override;
 private:
