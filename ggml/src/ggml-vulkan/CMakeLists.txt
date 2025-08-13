@@ -126,6 +126,8 @@ if (Vulkan_FOUND)
         PRIVATE
             ${CMAKE_CURRENT_BINARY_DIR}
             ../../../vendor
+    target_include_directories(ggml-vulkan PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+    target_include_directories(ggml-vulkan PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/vulkan_cpp_wrapper/include")
 
     )
     if (ANDROID)
