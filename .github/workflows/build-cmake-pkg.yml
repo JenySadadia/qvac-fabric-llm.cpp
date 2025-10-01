@@ -29,6 +29,10 @@ jobs:
           export LLAMA_CONFIG="$PREFIX"/share/llama/llama-config.cmake
           build_commit=$(git rev-parse --short HEAD | xargs)
           build_number=$(git rev-list --count HEAD | xargs)
+          tclsh <<'EOF'
+          set build(commit)  [string trim [exec git rev-parse --short HEAD]]
+          set build(number)  [string trim [exec git rev-list  --count HEAD]]
+          set build(version) "0.0.$build(number)"
 
           major=$(grep -oE "set\(LLAMA_VERSION_MAJOR[[:space:]]+[0-9]+" CMakeLists.txt | grep -oE "[0-9]+$")
           minor=$(grep -oE "set\(LLAMA_VERSION_MINOR[[:space:]]+[0-9]+" CMakeLists.txt | grep -oE "[0-9]+$")
