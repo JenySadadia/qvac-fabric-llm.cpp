@@ -327,11 +327,6 @@ if (LLAMA_BUILD_COMMON)
   install(
       TARGETS cpp-httplib
       EXPORT llama-targets)
-  if (NOT LLAMA_CURL)
-    install(
-      TARGETS cpp-httplib
-      EXPORT llama-targets)
-  endif()
 
   install(
     TARGETS llama-common llama-common-base
