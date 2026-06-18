@@ -319,6 +319,13 @@ endif()
 llama_build(test-backend-ops.cpp LINK ggml)
 
 llama_build_and_test(test-tiled-mulmat.cpp LINK ggml)
+
+# Vulkan TBQ/PQ copy-to-quant subgroup-size sweep. Spawns itself with different
+# GGML_VK_TBQ_COPY_SG_SIZE values to exercise the shader's cross-subgroup stitch
+# path on hardware that only exposes one native subgroup size. Auto-skips when no
+# GPU backend is available.
+llama_build_and_test(test-copy-tbq-subgroups.cpp)
+
 llama_build_and_test(test-model-load-cancel.cpp LABEL "model")
 llama_build_and_test(test-model-load-disk.cpp   LABEL "model")
 llama_build_and_test(test-model-load-memory.cpp LABEL "model")
