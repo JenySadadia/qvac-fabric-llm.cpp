@@ -372,9 +372,16 @@ llama_build_and_test(test-copy-tbq-subgroups.cpp)
 llama_build_and_test(test-model-load-cancel.cpp LABEL "model behavior")
 llama_build_and_test(test-model-load-disk.cpp   LABEL "model behavior")
 llama_build_and_test(test-model-load-memory.cpp LABEL "model behavior")
+target_include_directories(test-model-load-memory PRIVATE ${PROJECT_SOURCE_DIR}/common_test)
 llama_build_and_test(test-model-load-memory-split.cpp LABEL "model behavior")
 llama_build_and_test(test-autorelease.cpp       LABEL "model behavior")
 llama_build_and_test(test-backend-sampler.cpp   LABEL "model behavior backend")
+# QVAC-21914: ggml-opencl flash-attention q-chunking parity vs the CPU
+# backend. Unconditional and self-skipping at runtime when no OpenCL device is
+# present (like test-copy-tbq-subgroups above), so it exercises chunking
+# wherever OpenCL exists (Adreno devices, desktop OpenCL, PoCL). Does not link
+# mtmd, so it is intentionally outside the LLAMA_MTMD block below.
+llama_build_and_test(test-opencl-fa-chunking.cpp)
 
 if (APPLE)
     llama_build(test-rset-release.cpp)
@@ -398,7 +405,15 @@ endif()
 
 # libmtmd
 if (LLAMA_MTMD)
+<<<<<<< HEAD
     llama_build_and_test(test-mtmd-c-api.c  LABEL behavior  LINK mtmd)
+=======
+    llama_build_and_test(test-mtmd-c-api.c LINK mtmd)
+
+    # QVAC-21914: clip flash-attention AUTO budget arithmetic (pure CPU).
+    llama_build_and_test(test-clip-fa-cutoff.cpp LINK mtmd)
+    target_include_directories(test-clip-fa-cutoff PRIVATE ${PROJECT_SOURCE_DIR}/tools/mtmd)
+>>>>>>> 89b35dbff2 (fix: QVAC-21914 downgrade non-coopmat clip FA hard-disable to AUTO (budget-aware))
 endif()
 
 llama_build_and_test(test-mtmd-impl.cpp  LABEL behavior  LINK mtmd)
