@@ -405,15 +405,11 @@ endif()
 
 # libmtmd
 if (LLAMA_MTMD)
-<<<<<<< HEAD
     llama_build_and_test(test-mtmd-c-api.c  LABEL behavior  LINK mtmd)
-=======
-    llama_build_and_test(test-mtmd-c-api.c LINK mtmd)
 
     # QVAC-21914: clip flash-attention AUTO budget arithmetic (pure CPU).
     llama_build_and_test(test-clip-fa-cutoff.cpp LINK mtmd)
     target_include_directories(test-clip-fa-cutoff PRIVATE ${PROJECT_SOURCE_DIR}/tools/mtmd)
->>>>>>> 89b35dbff2 (fix: QVAC-21914 downgrade non-coopmat clip FA hard-disable to AUTO (budget-aware))
 endif()
 
 llama_build_and_test(test-mtmd-impl.cpp  LABEL behavior  LINK mtmd)
