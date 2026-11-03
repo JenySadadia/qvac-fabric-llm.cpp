@@ -2941,7 +2941,7 @@ public:
             return;
         }
 
-        std::vector<ggml_tensor *> tensors;
+        std::vector<const ggml_tensor *> tensors;
         std::vector<size_t> offsets;
         std::vector<size_t> sizes;
         std::vector<size_t> data_offsets;
@@ -2957,8 +2957,7 @@ public:
             data_offsets.push_back(winfo.data_offset);
         }
 
-        std::vector<const ggml_tensor *> const_tensors(tensors.begin(), tensors.end());
-        ggml_backend_tensor_get_n(const_tensors.data(), base_ptr, offsets.data(), sizes.data(), data_offsets.data(), winfos.size());
+        ggml_backend_tensor_get_n(tensors.data(), base_ptr, offsets.data(), sizes.data(), data_offsets.data(), winfos.size());
     }
 
     void write(const void * src, size_t size) override {
