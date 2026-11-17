@@ -866,18 +866,6 @@ void ggml_backend_load_all_from_path(const char * dir_path) {
     ggml_backend_load_best("sycl",     silent, dir_path);
     ggml_backend_load_best("vulkan",   silent, dir_path);
     ggml_backend_load_best("virtgpu",  silent, dir_path);
-    ggml_backend_load_best("hexagon",  silent, dir_path);
-    ggml_backend_load_best("musa",     silent, dir_path);
-    ggml_backend_load_best("blas", silent, dir_path);
-    ggml_backend_load_best("zendnn", silent, dir_path);
-    ggml_backend_load_best("cann", silent, dir_path);
-    ggml_backend_load_best("cuda", silent, dir_path);
-    ggml_backend_load_best("hip", silent, dir_path);
-    ggml_backend_load_best("metal", silent, dir_path);
-    ggml_backend_load_best("rpc", silent, dir_path);
-    ggml_backend_load_best("sycl", silent, dir_path);
-    ggml_backend_load_best("vulkan", silent, dir_path);
-    ggml_backend_load_best("virtgpu", silent, dir_path);
 
     bool useOpencl = true;
     const char * webgpu_autoload = std::getenv("GGML_WEBGPU_AUTOLOAD");
