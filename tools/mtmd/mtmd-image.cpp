@@ -811,7 +811,7 @@ mtmd_image_preproc_out mtmd_image_preprocessor_fixed_size::preprocess(const mtmd
 
 // Resize to [min_pixels, max_pixels] with aspect ratio preserved, aligned to `align_size`, rounding .5 to even
 // like the transformers smart_resize reference (Python round()); models opt in via hparams.image_round_half_even.
-clip_image_size mtmd_calc_dynamic_image_size(const clip_image_size & size, int align_size, int min_pixels, int max_pixels) {
+mtmd_image_size mtmd_calc_dynamic_image_size(const mtmd_image_size & size, int align_size, int min_pixels, int max_pixels) {
     return img_tool::calc_size_preserved_ratio(size, {align_size, min_pixels, max_pixels, 0, /* round_half_even */ true});
 }
 
