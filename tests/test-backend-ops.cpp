@@ -14779,8 +14779,18 @@ struct test_speech_htp_weights : test_speech_htp<T> {
         return copy;
     }
 
+    // T's graph built in one context, without virtual dispatch: test_mul_mat builds through its
+    // 2-context overload, and its 1-context one forwards virtually to the override below
+    ggml_tensor * build_graph_single_ctx(ggml_context * ctx) {
+        if constexpr (std::is_base_of_v<test_mul_mat, T>) {
+            return T::build_graph(ctx, ctx);
+        } else {
+            return T::build_graph(ctx);
+        }
+    }
+
     ggml_tensor * build_graph(ggml_context * ctx, ggml_context * weights) override {
-        ggml_tensor * out = T::build_graph(ctx);
+        ggml_tensor * out = build_graph_single_ctx(ctx);
         std::unordered_map<ggml_tensor *, ggml_tensor *> relocated;
         for (ggml_tensor * node = ggml_get_first_tensor(ctx); node; node = ggml_get_next_tensor(ctx, node)) {
             for (ggml_tensor * & src : node->src) {
@@ -14848,8 +14858,8 @@ struct test_speech_matmul_precision : test_mul_mat {
 
     std::string vars() override { return "suite=speech_htp,prec=f32," + test_mul_mat::vars(); }
 
-    ggml_tensor * build_graph(ggml_context * ctx) override {
-        ggml_tensor * out = test_mul_mat::build_graph(ctx);
+    ggml_tensor * build_graph(ggml_context * ctx, ggml_context * ctx_weights) override {
+        ggml_tensor * out = test_mul_mat::build_graph(ctx, ctx_weights);
         GGML_ASSERT(ggml_prec_set_acc(out, GGML_PREC_F32));
         return out;
     }
